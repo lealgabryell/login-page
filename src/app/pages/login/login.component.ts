@@ -28,7 +28,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private LoginService: LoginService,
-    private toastService: ToastrService
+    private ToastService: ToastrService
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -44,9 +44,9 @@ export class LoginComponent {
       this.loginForm.value.email,
       this.loginForm.value.password
     ).subscribe({
-      next: () => this.toastService.success('Login feito com sucesso!'),
+      next: () => this.ToastService.success('Login feito com sucesso!'),
       error: () =>
-        this.toastService.error('Erro inesperado! tente novamente mais tarde.'),
+        this.ToastService.error('Erro inesperado! tente novamente mais tarde.'),
     });
   }
   navigate() {
