@@ -10,12 +10,16 @@ import { PrimaryInputComponent } from '../../components/primary-input/primary-in
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { ToastrService } from 'ngx-toastr';
+
 interface signupForm {
+  name: FormControl;
   email: FormControl;
   password: FormControl;
+  passwordConfirm: FormControl;
 }
+
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   standalone: true,
   imports: [
     DefaultLoginLayoutComponent,
@@ -23,19 +27,24 @@ interface signupForm {
     PrimaryInputComponent,
   ],
   providers: [LoginService, ToastrService],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss',
 })
-export class LoginComponent {
-  loginForm!: FormGroup<signupForm>;
+export class SignupComponent {
+  signupForm!: FormGroup<signupForm>;
   constructor(
     private router: Router,
     private LoginService: LoginService,
     private ToastService: ToastrService
   ) {
-    this.loginForm = new FormGroup({
+    this.signupForm = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      passwordConfirm: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
       ]),
@@ -44,8 +53,8 @@ export class LoginComponent {
 
   submit() {
     this.LoginService.login(
-      this.loginForm.value.email,
-      this.loginForm.value.password
+      this.signupForm.value.email,
+      this.signupForm.value.password
     ).subscribe({
       next: () => this.ToastService.success('Login feito com sucesso!'),
       error: () =>
@@ -53,6 +62,6 @@ export class LoginComponent {
     });
   }
   navigate() {
-    this.router.navigate(['/signup']);
+    this.router.navigate(['/login']);
   }
 }
